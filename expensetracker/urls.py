@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from tracker.views import delete_transaction, index
+
 urlpatterns = [
+    path('', index, name='index'),
+    path('delete/<int:id>/', delete_transaction, name='delete_transaction'),
     path('admin/', admin.site.urls),
 ]

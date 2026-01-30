@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .income {
+            color: green;
+        }
+        .expense {
+            color: red;
+        }
+        .transaction-income {
+            border-right: 5px solid green;
+        }
+        .transaction-expense {
+            border-right: 5px solid red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5 shadow-lg p-5" style="max-width: 600px;">
+
+    <!-- Title -->
+    <h2 class="text-center mb-4">💰 Expense Tracker</h2>
+
+    <!-- Balance -->
+    <div class="card mb-3">
+        <div class="card-body text-center">
+            <h5>Your Balance</h5>
+            <h2 name="balance" id="balance">₹{{balance|floatformat:2}}</h2>
+        </div>
+    </div>
+
+    <!-- Income & Expense -->
+    <div class="row text-center mb-4">
+        <div class="col-md-6 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Income</h6>
+                    <h4 name="income" class="income" id="income">₹{{income|floatformat:2}}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <h6>Expense</h6>
+                    <h4 name="expense" class="expense" id="expense">₹{{expenses|floatformat:2}}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History -->
+    <h5>History</h5>
+
+    <ul class="list-group mb-4">
+        {% for transaction in transactions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center 
+            {% if transaction.amount > 0 %}
+                transaction-income
+            {% else %}
+                transaction-expense
+            {% endif %}
+        ">
+            {{ transaction.description }}
+            <span>
+                {% if transaction.amount > 0 %}
+                    +₹{{ transaction.amount|floatformat:2 }}
+                {% else %}
+                    -₹{{ transaction.amount|floatformat:2|slice:"1:" }}
+                {% endif %}
+                <a href="{% url 'delete_transaction' transaction.id %}" class="btn btn-sm btn-danger ms-3">x</a>
+            </span>
+        </li>
+        {% empty %} 
+        <li class="list-group-item text-center">No transactions yet.</li>
+        {% endfor %}
+    </ul>
+    
+    
+
+    <!-- Add Transaction -->
+    <h5>Add New Transaction</h5>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Text</label>
+            <input name="description" type="text" class="form-control" placeholder="Enter description">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Amount <br>
+                <small class="text-muted">(positive = income, negative = expense)</small>
+            </label>
+            <input name="amount" type="number" class="form-control" placeholder="Enter amount">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Add Transaction
+        </button>
+    </form>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

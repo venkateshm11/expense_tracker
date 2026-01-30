@@ -75,11 +75,14 @@ WSGI_APPLICATION = 'expensetracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'djangodb',          # The name of the database you created in phpMyAdmin
+        'USER': 'root',              # Default XAMPP MySQL username
+        'PASSWORD': 'Venky',              # Default XAMPP MySQL password is empty
+        'HOST': 'localhost',         # Or '127.0.0.1'
+        'PORT': '3306',              # Default MySQL port in XAMPP (check your XAMPP control panel)
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
